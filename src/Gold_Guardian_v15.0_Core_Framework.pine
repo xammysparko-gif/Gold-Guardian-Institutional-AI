@@ -1,0 +1,53 @@
+//@version=6
+indicator(
+     title = "Gold Guardian Institutional AI",
+     shorttitle = "GG AI",
+     overlay = true,
+     max_labels_count = 500,
+     max_lines_count = 500,
+     max_boxes_count = 500)
+
+//=============================================================================
+// GOLD GUARDIAN INSTITUTIONAL AI
+//-----------------------------------------------------------------------------
+// Version  : 15.0
+// Release  : Genesis
+// Status   : Development
+// Author   : D-SAM'S FAMILY + ChatGPT
+// Platform : TradingView Pine Script v6
+//=============================================================================
+// INPUT MANAGER
+//=============================================================================
+
+groupGeneral = "General Settings"
+
+showDashboard = input.bool(true, "Show Dashboard", group = groupGeneral)
+showSignals   = input.bool(true, "Show Trading Signals", group = groupGeneral)
+showStructure = input.bool(true, "Show Market Structure", group = groupGeneral)
+showVolume    = input.bool(true, "Show Volume Analysis", group = groupGeneral)
+
+//=============================================================================
+// THEME
+//=============================================================================
+
+bullColor = color.lime
+bearColor = color.red
+neutralColor = color.gray
+dashboardColor = color.black
+textColor = color.white
+
+//=============================================================================
+// THEME
+//=============================================================================
+
+bullColor = color.lime
+bearColor = color.red
+neutralColor = color.gray
+dashboardColor = color.black
+textColor = color.white
+
+//=============================================================================
+// MAIN LOOP
+//=============================================================================
+
+plot(na)
