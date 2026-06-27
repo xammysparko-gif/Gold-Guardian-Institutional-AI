@@ -1,0 +1,144 @@
+//@version=6
+//=============================================================================
+// GOLD GUARDIAN INSTITUTIONAL AI
+//-----------------------------------------------------------------------------
+// Version      : 15.1
+// Build        : 001
+// Release      : Genesis
+// Author       : D-SAM'S FAMILY + ChatGPT
+// Platform     : TradingView Pine Script v6
+// Status       : Production Foundation
+//=============================================================================
+
+indicator(
+     title = "Gold Guardian Institutional AI",
+     shorttitle = "GG AI",
+     overlay = true,
+     max_labels_count = 500,
+     max_lines_count = 500,
+     max_boxes_count = 500)
+
+//=============================================================================
+// INPUT MANAGER
+//=============================================================================
+
+groupGeneral   = "General"
+groupStructure = "Market Structure"
+groupTrend     = "Trend"
+
+ggShowStructure = input.bool(true, "Show Structure", group = groupStructure)
+ggShowTrend     = input.bool(true, "Show Trend", group = groupTrend)
+ggShowDashboard = input.bool(true, "Show Dashboard", group = groupGeneral)
+
+ggSwingLength = input.int(5, "Swing Length", minval = 2, group = groupStructure)
+
+ggATRLength = input.int(14, "ATR Length", group = groupStructure)
+ggATRMult   = input.float(1.2, "ATR Filter", step = 0.1, group = groupStructure)
+
+ggEMALength = input.int(200, "EMA Length", group = groupTrend)
+
+//=============================================================================
+// THEME
+//=============================================================================
+
+ggBullColor = color.lime
+ggBearColor = color.red
+ggNeutralColor = color.gray
+ggTextColor = color.white
+
+//=============================================================================
+// VOLATILITY ENGINE
+//=============================================================================
+
+ggATR = ta.atr(ggATRLength)
+
+//=============================================================================
+// TREND ENGINE (FOUNDATION)
+//=============================================================================
+
+ggEMA = ta.ema(close, ggEMALength)
+
+ggBullTrend = close > ggEMA
+ggBearTrend = close < ggEMA
+
+plot(ggShowTrend ? ggEMA : na,
+     title = "EMA 200",
+     color = color.orange,
+     linewidth = 2)
+
+//=============================================================================
+// STRUCTURE ENGINE (FOUNDATION)
+//=============================================================================
+
+ggPivotHigh = ta.pivothigh(high, ggSwingLength, ggSwingLength)
+ggPivotLow  = ta.pivotlow(low, ggSwingLength, ggSwingLength)
+
+var float ggLastHigh = na
+var float ggLastLow  = na
+
+if ggShowStructure
+
+    if not na(ggPivotHigh)
+
+        bool validHigh = na(ggLastHigh) or
+             math.abs(ggPivotHigh - ggLastHigh) > ggATR * ggATRMult
+
+        if validHigh
+
+            string highLabel =
+                 na(ggLastHigh) ? "HH" :
+                 ggPivotHigh > ggLastHigh ? "HH" : "LH"
+
+            label.new(
+                 bar_index - ggSwingLength,
+                 ggPivotHigh,
+                 highLabel,
+                 style = label.style_label_down,
+                 color = highLabel == "HH" ? ggBullColor : ggBearColor,
+                 textcolor = ggTextColor,
+                 size = size.small)
+
+            ggLastHigh := ggPivotHigh
+
+    if not na(ggPivotLow)
+
+        bool validLow = na(ggLastLow) or
+             math.abs(ggPivotLow - ggLastLow) > ggATR * ggATRMult
+
+        if validLow
+
+            string lowLabel =
+                 na(ggLastLow) ? "HL" :
+                 ggPivotLow > ggLastLow ? "HL" : "LL"
+
+            label.new(
+                 bar_index - ggSwingLength,
+                 ggPivotLow,
+                 lowLabel,
+                 style = label.style_label_up,
+                 color = lowLabel == "HL" ? ggBullColor : ggBearColor,
+                 textcolor = ggTextColor,
+                 size = size.small)
+
+            ggLastLow := ggPivotLow
+
+//=============================================================================
+// STATE ENGINE (FOUNDATION)
+//=============================================================================
+
+int ggTrendState = ggBullTrend ? 1 : ggBearTrend ? -1 : 0
+
+//=============================================================================
+// PLACEHOLDERS FOR FUTURE MODULES
+//=============================================================================
+
+// BOS Engine
+// CHOCH Engine
+// Smart Money Engine
+// AI Decision Engine
+// Dashboard Engine
+// Alert Engine
+
+//=============================================================================
+// BUILD 001 COMPLETE
+//=============================================================================
